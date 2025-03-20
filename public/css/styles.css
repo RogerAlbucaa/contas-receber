@@ -1,0 +1,174 @@
+:root {
+    --vencido-color: #dc3545;
+    --vencendo-color: #fd7e14;
+    --a-vencer-color: #6c757d;
+    --recebido-color: #198754;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.header-bar {
+    background-color: #052c65;
+    border-radius: 10px 10px 0 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.header-dots {
+    display: flex;
+    margin-left: auto;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    margin-left: 6px;
+}
+
+.dot-gray {
+    background-color: #adb5bd;
+}
+
+.dot-yellow {
+    background-color: #ffc107;
+}
+
+.dot-red {
+    background-color: #dc3545;
+}
+
+.page-title {
+    color: #212529;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.page-title i {
+    margin-right: 10px;
+    color: #0d6efd;
+}
+
+.status-box {
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.status-vencido {
+    background-color: #f8d7da;
+    color: var(--vencido-color);
+    border: 1px solid #f5c2c7;
+}
+
+.status-vencendo {
+    background-color: #fff3cd;
+    color: var(--vencendo-color);
+    border: 1px solid #ffecb5;
+}
+
+.status-a-vencer {
+    background-color: #e2e3e5;
+    color: var(--a-vencer-color);
+    border: 1px solid #d3d6d8;
+}
+
+.status-recebido {
+    background-color: #d1e7dd;
+    color: var(--recebido-color);
+    border: 1px solid #badbcc;
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.badge-recebido {
+    background-color: var(--recebido-color);
+    color: white;
+}
+
+.badge-total {
+    background-color: #212529;
+    color: white;
+}
+
+.action-btn {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    font-size: 0.8rem;
+}
+
+.btn-view {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-payment {
+    background-color: #198754;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-more {
+    background-color: #6c757d;
+    color: white;
+}
+
+.value-cell {
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.verified-icon {
+    color: #198754;
+    font-size: 0.8rem;
+    margin-left: 5px;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.breadcrumb-custom {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.month-selector {
+    font-weight: 600;
+}

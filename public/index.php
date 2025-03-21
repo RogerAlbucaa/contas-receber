@@ -62,7 +62,7 @@ try {
                 <!-- Action buttons and date selection -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <button class="btn btn-success">
+                        <button class="btn btn-success btn-adicionar">
                             <i class="fas fa-plus"></i> Adicionar
                         </button>
                         <div class="btn-group ms-2">
@@ -168,8 +168,12 @@ try {
         </div>
     </div>
     
+    <!-- Include modal -->
+    <?php require_once __DIR__ . '/views/modal-conta.php'; ?>
+    
     <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/contas.js"></script>
+    <script src="js/modal-conta.js"></script>
 </body>
 </html>

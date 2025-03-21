@@ -46,4 +46,28 @@ class ContasReceberService {
 
         return $totais;
     }
+
+    public function getConta($id) {
+        return $this->supabase->request("/rest/v1/vw_contas_receber?id=eq.{$id}&select=*")->first();
+    }
+
+    public function salvarConta($dados) {
+        return $this->supabase->request('/rest/v1/contas_receber', 'POST', $dados);
+    }
+
+    public function atualizarConta($id, $dados) {
+        return $this->supabase->request("/rest/v1/contas_receber?id=eq.{$id}", 'PATCH', $dados);
+    }
+
+    public function getEntidades() {
+        return $this->supabase->request('/rest/v1/entidades?select=*');
+    }
+
+    public function getPlanoContas() {
+        return $this->supabase->request('/rest/v1/plano_contas?select=*');
+    }
+
+    public function getFormasPagamento() {
+        return $this->supabase->request('/rest/v1/formas_pagamento?select=*');
+    }
 }

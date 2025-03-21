@@ -1,7 +1,21 @@
+// Definir modal globalmente
+window.modalConta = null;
+
 $(document).ready(function() {
-    const modal = new bootstrap.Modal(document.getElementById('contaModal'));
+    // Inicializar modal globalmente
+    window.modalConta = new bootstrap.Modal(document.getElementById('contaModal'));
     let modoEdicao = false;
     let contaId = null;
+
+    // Função global para editar conta
+    window.editarConta = function(id) {
+        modoEdicao = true;
+        contaId = id;
+        $('#modalTitle').text('Editar Conta');
+        $('.btn-submit').text('Salvar Alterações');
+        carregarDadosConta(id);
+        window.modalConta.show();
+    };
 
     // Handler para o botão Adicionar
     $('.btn-adicionar').click(function() {
@@ -9,7 +23,7 @@ $(document).ready(function() {
         resetForm();
         $('#modalTitle').text('Adicionar Nova Conta');
         $('.btn-submit').text('Adicionar');
-        modal.show();
+        window.modalConta.show();
     });
 
     // Handler para o botão Editar
@@ -19,7 +33,7 @@ $(document).ready(function() {
         $('#modalTitle').text('Editar Conta');
         $('.btn-submit').text('Salvar Alterações');
         carregarDadosConta(contaId);
-        modal.show();
+        window.modalConta.show();
     });
 
     // Função para mostrar toast
@@ -70,8 +84,15 @@ $(document).ready(function() {
                         modoEdicao ? 'A conta foi atualizada com sucesso!' : 'A nova conta foi adicionada com sucesso!',
                         'success'
                     );
-                    modal.hide();
-                    setTimeout(() => window.location.reload(), 1500);
+                    window.modalConta.hide();
+                    
+                    // Recarregar mantendo a ordenação
+                    const savedOrder = localStorage.getItem('contasOrderBy');
+                    const redirectUrl = savedOrder ? 
+                        `${window.location.pathname}?order=${savedOrder}` : 
+                        window.location.pathname;
+                    
+                    setTimeout(() => window.location.href = redirectUrl, 1500);
                 } else {
                     showToast('Erro', response.message || 'Erro ao processar operação', 'error');
                 }
@@ -100,12 +121,12 @@ $(document).ready(function() {
                     $('#lote').val(conta.lote);
                 } else {
                     alert('Erro ao carregar dados da conta');
-                    modal.hide();
+                    window.modalConta.hide();
                 }
             },
             error: function() {
                 alert('Erro ao carregar dados da conta');
-                modal.hide();
+                window.modalConta.hide();
             }
         });
     }

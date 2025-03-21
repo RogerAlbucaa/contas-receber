@@ -172,3 +172,17 @@ body {
 .month-selector {
     font-weight: 600;
 }
+
+/* Adicionar estilos para o efeito de transição */
+.table td {
+    transition: all 0.3s ease;
+}
+
+.btn-view.active {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-view.active i {
+    color: white;
+}

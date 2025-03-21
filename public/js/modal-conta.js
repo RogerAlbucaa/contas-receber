@@ -33,30 +33,30 @@ $(document).ready(function() {
             plano_conta_id: formData.get('plano_conta_id'),
             forma_pagamento_id: formData.get('forma_pagamento_id'),
             data_vencimento: formData.get('data_vencimento'),
-            valor_total: formData.get('valor_total'),
+            valor_total: parseFloat(formData.get('valor_total')),
             situacao: formData.get('situacao'),
             lote: formData.get('lote'),
-            data_emissao: new Date().toISOString().split('T')[0]
+            data_emissao: new Date().toISOString().split('T')[0],
+            verificado: false
         };
 
         $.ajax({
-            url: `${SUPABASE_CONFIG.url}/rest/v1/contas_receber`, // Isso não vai funcionar em um arquivo .js
+            url: 'api/salvar-conta.php',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dados),
-            headers: {
-                'apikey': SUPABASE_CONFIG.key,
-                'Authorization': `Bearer ${SUPABASE_CONFIG.key}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=representation'
-            },
             success: function(response) {
-                modal.hide();
-                window.location.reload();
+                if (response.success) {
+                    alert('Conta salva com sucesso!');
+                    modal.hide();
+                    window.location.reload();
+                } else {
+                    mostrarErros({ error: response.message || 'Erro ao salvar conta' });
+                }
             },
             error: function(xhr) {
                 console.error('Erro:', xhr);
-                mostrarErros(xhr.responseJSON || { error: 'Erro ao processar requisição' });
+                mostrarErros({ error: 'Erro ao processar requisição' });
             }
         });
     });

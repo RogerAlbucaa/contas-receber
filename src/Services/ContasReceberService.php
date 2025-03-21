@@ -52,19 +52,43 @@ class ContasReceberService {
     }
 
     public function salvarConta($dados) {
+        // Validar dados obrigatórios
+        $camposObrigatorios = ['descricao', 'entidade_id', 'plano_conta_id', 
+                              'forma_pagamento_id', 'data_vencimento', 'valor_total'];
+        
+        foreach ($camposObrigatorios as $campo) {
+            if (empty($dados[$campo])) {
+                throw new \Exception("Campo {$campo} é obrigatório");
+            }
+        }
+
         // Gerar código automaticamente
         $dados['codigo'] = $this->gerarCodigo();
+        
+        // Garantir valores padrão
+        $dados['verificado'] = false;
+        $dados['data_emissao'] = $dados['data_emissao'] ?? date('Y-m-d');
+        
+        // Converter valores
+        $dados['valor_total'] = floatval($dados['valor_total']);
         
         return $this->supabase->request('/rest/v1/contas_receber', 'POST', $dados);
     }
 
     private function gerarCodigo() {
-        $ultimaConta = $this->supabase->request('/rest/v1/contas_receber?select=codigo&order=codigo.desc&limit=1');
-        if (empty($ultimaConta)) {
-            return '1001';
+        try {
+            $ultimaConta = $this->supabase->request('/rest/v1/contas_receber?select=codigo&order=codigo.desc&limit=1');
+            
+            if (empty($ultimaConta)) {
+                return '1001';
+            }
+            
+            $ultimoCodigo = intval($ultimaConta[0]['codigo']);
+            return sprintf('%04d', $ultimoCodigo + 1);
+        } catch (\Exception $e) {
+            // Fallback: gerar código baseado na data + número aleatório
+            return date('ymd') . sprintf('%04d', rand(1, 9999));
         }
-        $ultimoCodigo = intval($ultimaConta[0]['codigo']);
-        return strval($ultimoCodigo + 1);
     }
 
     public function atualizarConta($id, $dados) {

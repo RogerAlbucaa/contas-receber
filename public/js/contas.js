@@ -172,3 +172,60 @@ $(document).ready(function() {
                     // Converter valor em número removendo formatação
                     aValue = parseFloat($(a).find('td:eq(6)').text().replace('R$', '').replace('.', '').replace(',', '.'));
                     bValue = parseFloat($(b).find('td:eq(6)').text().replace('R$', '').replace('.', '').replace(',', '.'));
+                    // Ordenar decrescente (maiores valores primeiro)
+                    return bValue - aValue;
+
+                case 'situacao':
+                    // Prioridade das situações
+                    const prioridade = {
+                        'Pendente': 1,
+                        'Vencendo': 2,
+                        'Vencido': 3,
+                        'Recebido': 4,
+                        'Cancelado': 5
+                    };
+                    aValue = prioridade[$(a).find('td:eq(7)').text().trim()] || 999;
+                    bValue = prioridade[$(b).find('td:eq(7)').text().trim()] || 999;
+                    return aValue - bValue;
+            }
+        });
+
+        // Reinsere as linhas ordenadas na tabela
+        tbody.empty();
+        $.each(rows, function(index, row) {
+            tbody.append(row);
+        });
+
+        // Reattach todos os event listeners após reordenação
+        attachAllListeners();
+
+        // Restaurar estado de visibilidade das contas
+        contasOcultas.forEach(contaId => {
+            const row = tbody.find(`button[data-id="${contaId}"]`).closest('tr');
+            if (row.length) {
+                row.find('td:not(:last-child)').each(function() {
+                    const td = $(this);
+                    const length = td.text().trim().length;
+                    td.attr('data-original', td.html());
+                    td.html('*'.repeat(length > 0 ? length : 1));
+                });
+                row.find('.btn-view i')
+                   .removeClass('fa-eye')
+                   .addClass('fa-eye-slash');
+            }
+        });
+
+        // Mostrar toast de confirmação com mensagem específica
+        const mensagens = {
+            'data': 'Contas ordenadas por data (mais recentes primeiro)',
+            'valor': 'Contas ordenadas por valor (maiores valores primeiro)',
+            'situacao': 'Contas ordenadas por situação (prioridade para pendentes)'
+        };
+
+        const toast = new bootstrap.Toast($('#liveToast'));
+        $('#toastTitle').text('Lista Ordenada');
+        $('#toastMessage').text(mensagens[orderBy]);
+        $('#liveToast').removeClass('error').addClass('success');
+        toast.show();
+    });
+});

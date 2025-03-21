@@ -52,7 +52,19 @@ class ContasReceberService {
     }
 
     public function salvarConta($dados) {
+        // Gerar código automaticamente
+        $dados['codigo'] = $this->gerarCodigo();
+        
         return $this->supabase->request('/rest/v1/contas_receber', 'POST', $dados);
+    }
+
+    private function gerarCodigo() {
+        $ultimaConta = $this->supabase->request('/rest/v1/contas_receber?select=codigo&order=codigo.desc&limit=1');
+        if (empty($ultimaConta)) {
+            return '1001';
+        }
+        $ultimoCodigo = intval($ultimaConta[0]['codigo']);
+        return strval($ultimoCodigo + 1);
     }
 
     public function atualizarConta($id, $dados) {

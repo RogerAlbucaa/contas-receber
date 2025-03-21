@@ -14,27 +14,24 @@ try {
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Conta</h5>
+                <h5 class="modal-title" id="modalTitle">Adicionar Nova Conta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form id="formConta">
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Código</label>
-                            <input type="text" class="form-control" id="codigo" name="codigo" required>
+                        <div class="col-12">
+                            <label class="form-label">Descrição</label>
+                            <input type="text" class="form-control" id="descricao" name="descricao" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Entidade</label>
                             <select class="form-select" id="entidade_id" name="entidade_id" required>
+                                <option value="">Selecione uma entidade</option>
                                 <?php foreach($entidades as $entidade): ?>
                                     <option value="<?= $entidade['id'] ?>"><?= $entidade['nome'] ?></option>
                                 <?php endforeach; ?>
                             </select>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Descrição</label>
-                            <input type="text" class="form-control" id="descricao" name="descricao" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Plano de Contas</label>
@@ -78,7 +75,7 @@ try {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="formConta" class="btn btn-primary">Salvar</button>
+                <button type="submit" form="formConta" class="btn btn-primary btn-submit">Salvar</button>
             </div>
         </div>
     </div>

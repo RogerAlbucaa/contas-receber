@@ -25,9 +25,9 @@ $(document).ready(function() {
     // Submit do formulário
     $('#formConta').submit(function(e) {
         e.preventDefault();
+        
         const formData = new FormData(this);
         const dados = {
-            codigo: formData.get('codigo'),
             descricao: formData.get('descricao'),
             entidade_id: formData.get('entidade_id'),
             plano_conta_id: formData.get('plano_conta_id'),
@@ -36,24 +36,26 @@ $(document).ready(function() {
             valor_total: formData.get('valor_total'),
             situacao: formData.get('situacao'),
             lote: formData.get('lote'),
-            data_emissao: new Date().toISOString().split('T')[0] // Data atual para novas contas
+            data_emissao: new Date().toISOString().split('T')[0]
         };
 
         $.ajax({
-            url: modoEdicao ? 
-                `/contas-receber/rest/v1/contas_receber?id=eq.${contaId}` : 
-                '/contas-receber/rest/v1/contas_receber',
-            method: modoEdicao ? 'PATCH' : 'POST',
+            url: `${SUPABASE_CONFIG.url}/rest/v1/contas_receber`, // Isso não vai funcionar em um arquivo .js
+            method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dados),
             headers: {
-                'Prefer': modoEdicao ? 'return=minimal' : 'return=representation'
+                'apikey': SUPABASE_CONFIG.key,
+                'Authorization': `Bearer ${SUPABASE_CONFIG.key}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation'
             },
             success: function(response) {
                 modal.hide();
                 window.location.reload();
             },
             error: function(xhr) {
+                console.error('Erro:', xhr);
                 mostrarErros(xhr.responseJSON || { error: 'Erro ao processar requisição' });
             }
         });

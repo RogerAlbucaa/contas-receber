@@ -77,7 +77,15 @@ try {
                         </div>
                     </div>
                     
-                    <div class="d-flex">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <select class="form-select" id="orderBy">
+                                <option value="">Ordenar por...</option>
+                                <option value="data">Data</option>
+                                <option value="valor">Valor</option>
+                                <option value="situacao">Situação</option>
+                            </select>
+                        </div>
                         <div class="month-selector me-3">
                             <span>Setembro de 2023 <i class="fas fa-calendar-alt ms-1"></i></span>
                         </div>
@@ -168,6 +176,19 @@ try {
         </div>
     </div>
     
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong class="me-auto" id="toastTitle">Notificação</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+            </div>
+        </div>
+    </div>
+
     <!-- Include modal -->
     <?php require_once __DIR__ . '/views/modal-conta.php'; ?>
     

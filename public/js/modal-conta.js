@@ -22,6 +22,22 @@ $(document).ready(function() {
         modal.show();
     });
 
+    // Função para mostrar toast
+    function showToast(title, message, type = 'success') {
+        const toast = $('#liveToast');
+        
+        // Remove classes antigas e adiciona nova
+        toast.removeClass('success error').addClass(type);
+        
+        // Atualiza conteúdo
+        $('#toastTitle').text(title);
+        $('#toastMessage').text(message);
+        
+        // Instancia e mostra o toast
+        const bsToast = new bootstrap.Toast(toast);
+        bsToast.show();
+    }
+
     // Submit do formulário
     $('#formConta').submit(function(e) {
         e.preventDefault();
@@ -49,16 +65,20 @@ $(document).ready(function() {
             data: JSON.stringify(dados),
             success: function(response) {
                 if (response.success) {
-                    alert(modoEdicao ? 'Conta atualizada com sucesso!' : 'Conta salva com sucesso!');
+                    showToast(
+                        modoEdicao ? 'Conta Atualizada' : 'Conta Adicionada',
+                        modoEdicao ? 'A conta foi atualizada com sucesso!' : 'A nova conta foi adicionada com sucesso!',
+                        'success'
+                    );
                     modal.hide();
-                    window.location.reload();
+                    setTimeout(() => window.location.reload(), 1500);
                 } else {
-                    mostrarErros({ error: response.message || 'Erro ao processar operação' });
+                    showToast('Erro', response.message || 'Erro ao processar operação', 'error');
                 }
             },
             error: function(xhr) {
                 console.error('Erro:', xhr);
-                mostrarErros({ error: 'Erro ao processar requisição' });
+                showToast('Erro', 'Erro ao processar requisição', 'error');
             }
         });
     });
@@ -100,18 +120,21 @@ $(document).ready(function() {
         $('#data_vencimento').val(new Date().toISOString().split('T')[0]);
     }
 
+    // Substituir a função mostrarErros existente
     function mostrarErros(errors) {
         $('.invalid-feedback').remove();
         $('.is-invalid').removeClass('is-invalid');
 
         if (typeof errors === 'object') {
-            Object.keys(errors).forEach(field => {
-                $(`#${field}`)
-                    .addClass('is-invalid')
-                    .after(`<div class="invalid-feedback">${errors[field]}</div>`);
-            });
-        } else {
-            alert('Erro ao processar operação');
+            if (errors.error) {
+                showToast('Erro', errors.error, 'error');
+            } else {
+                Object.keys(errors).forEach(field => {
+                    $(`#${field}`)
+                        .addClass('is-invalid')
+                        .after(`<div class="invalid-feedback">${errors[field]}</div>`);
+                });
+            }
         }
     }
 });

@@ -5,10 +5,10 @@ $(document).ready(function() {
     const savedOrder = localStorage.getItem('contasOrderBy');
     if (savedOrder) {
         $('#orderBy').val(savedOrder);
-        ordenarTabela(savedOrder);
+        ordenarTabela(savedOrder, false); // Não mostrar toast ao carregar
     }
 
-    function ordenarTabela(orderBy) {
+    function ordenarTabela(orderBy, showToast = true) {
         if (!orderBy) return;
         
         const tbody = $('.table tbody');
@@ -48,7 +48,11 @@ $(document).ready(function() {
         });
 
         attachAllListeners();
-        mostrarToastOrdenacao(orderBy);
+        
+        // Só mostra o toast se showToast for true
+        if (showToast) {
+            mostrarToastOrdenacao(orderBy);
+        }
     }
 
     function mostrarToastOrdenacao(orderBy) {
@@ -106,7 +110,7 @@ $(document).ready(function() {
         }
 
         localStorage.setItem('contasOrderBy', orderBy);
-        ordenarTabela(orderBy);
+        ordenarTabela(orderBy, true); // Mostrar toast ao ordenar manualmente
     });
     
     function ocultarConta(row, contaId) {

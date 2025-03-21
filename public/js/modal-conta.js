@@ -86,13 +86,13 @@ $(document).ready(function() {
                     );
                     window.modalConta.hide();
                     
-                    // Recarregar mantendo a ordenação
+                    // Recarregar mantendo a ordenação sem mostrar toast
                     const savedOrder = localStorage.getItem('contasOrderBy');
-                    const redirectUrl = savedOrder ? 
-                        `${window.location.pathname}?order=${savedOrder}` : 
-                        window.location.pathname;
+                    if (savedOrder) {
+                        localStorage.setItem('skipToast', 'true');
+                    }
                     
-                    setTimeout(() => window.location.href = redirectUrl, 1500);
+                    setTimeout(() => window.location.reload(), 1500);
                 } else {
                     showToast('Erro', response.message || 'Erro ao processar operação', 'error');
                 }

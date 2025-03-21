@@ -48,7 +48,8 @@ class ContasReceberService {
     }
 
     public function getConta($id) {
-        return $this->supabase->request("/rest/v1/vw_contas_receber?id=eq.{$id}&select=*")->first();
+        $resultado = $this->supabase->request("/rest/v1/contas_receber?id=eq.{$id}&select=*");
+        return !empty($resultado) ? $resultado[0] : null;
     }
 
     public function salvarConta($dados) {
@@ -92,6 +93,19 @@ class ContasReceberService {
     }
 
     public function atualizarConta($id, $dados) {
+        // Validar dados obrigatórios
+        $camposObrigatorios = ['descricao', 'entidade_id', 'plano_conta_id', 
+                              'forma_pagamento_id', 'data_vencimento', 'valor_total'];
+        
+        foreach ($camposObrigatorios as $campo) {
+            if (empty($dados[$campo])) {
+                throw new \Exception("Campo {$campo} é obrigatório");
+            }
+        }
+        
+        // Converter valores
+        $dados['valor_total'] = floatval($dados['valor_total']);
+        
         return $this->supabase->request("/rest/v1/contas_receber?id=eq.{$id}", 'PATCH', $dados);
     }
 

@@ -36,22 +36,24 @@ $(document).ready(function() {
             valor_total: parseFloat(formData.get('valor_total')),
             situacao: formData.get('situacao'),
             lote: formData.get('lote'),
-            data_emissao: new Date().toISOString().split('T')[0],
-            verificado: false
+            data_emissao: new Date().toISOString().split('T')[0]
         };
 
+        const url = modoEdicao ? `api/editar-conta.php?id=${contaId}` : 'api/salvar-conta.php';
+        const method = modoEdicao ? 'PUT' : 'POST';
+
         $.ajax({
-            url: 'api/salvar-conta.php',
-            method: 'POST',
+            url: url,
+            method: method,
             contentType: 'application/json',
             data: JSON.stringify(dados),
             success: function(response) {
                 if (response.success) {
-                    alert('Conta salva com sucesso!');
+                    alert(modoEdicao ? 'Conta atualizada com sucesso!' : 'Conta salva com sucesso!');
                     modal.hide();
                     window.location.reload();
                 } else {
-                    mostrarErros({ error: response.message || 'Erro ao salvar conta' });
+                    mostrarErros({ error: response.message || 'Erro ao processar operação' });
                 }
             },
             error: function(xhr) {
@@ -63,12 +65,11 @@ $(document).ready(function() {
 
     function carregarDadosConta(id) {
         $.ajax({
-            url: `/contas-receber/rest/v1/contas_receber?id=eq.${id}`,
+            url: `api/buscar-conta.php?id=${id}`,
             method: 'GET',
-            success: function(contas) {
-                if (contas && contas.length > 0) {
-                    const conta = contas[0];
-                    $('#codigo').val(conta.codigo);
+            success: function(response) {
+                if (response.success && response.data) {
+                    const conta = response.data;
                     $('#descricao').val(conta.descricao);
                     $('#entidade_id').val(conta.entidade_id);
                     $('#plano_conta_id').val(conta.plano_conta_id);
@@ -77,6 +78,9 @@ $(document).ready(function() {
                     $('#valor_total').val(conta.valor_total);
                     $('#situacao').val(conta.situacao);
                     $('#lote').val(conta.lote);
+                } else {
+                    alert('Erro ao carregar dados da conta');
+                    modal.hide();
                 }
             },
             error: function() {
